@@ -1,0 +1,21 @@
+version: 'v1'
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3001:80"
+    depends_on:
+      - backend1
+  backend1:
+    build: ./Backend1   
+    ports:
+      - "5001:5000"
+
+  backend2:
+    build: ./Backend2     
+    ports:
+      - "5002:5000"
+  backend3:
+    build: ./Backend3     
+    ports:
+      - "5003:5000"
