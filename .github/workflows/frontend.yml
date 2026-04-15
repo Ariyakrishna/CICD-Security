@@ -33,4 +33,4 @@ jobs:
         run: npm run build
 
       - name: Deploy
-        run: xcopy /E /I /Y dist D:\Deploy\frontend
+        run: xcopy /E /I /Y build D:\Deploy\frontend
