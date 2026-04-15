@@ -10,8 +10,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-deploy:
-    runs-on: self-hosted
+  build:
+    runs-on: windows-latest
 
     defaults:
       run:
@@ -32,5 +32,29 @@ jobs:
       - name: Build Frontend
         run: npm run build
 
-      - name: Deploy
-        run: xcopy /E /I /Y build D:\Deploy\frontend
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          path: frontend/build
+
+  deploy:
+    runs-on: self-hosted
+    needs: build
+
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-build
+          path: build
+
+      - name: Clean Old Deployment
+        shell: cmd
+        run: |
+          if exist D:\Deploy\frontend rmdir /s /q D:\Deploy\frontend
+
+      - name: Deploy New Build
+        shell: cmd
+        run: |
+          xcopy /E /I /Y build D:\Deploy\frontend
